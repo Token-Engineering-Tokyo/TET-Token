@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@log4js-node/logstash-http": "^1.0.0",
+    "@slack/client": "^4.6.0",
+    "axios": "^0.18.0",
+    "config": "^2.0.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "log4js": "^3.0.5",
+    "log4js-logstash": "^0.2.3",
+    "pug": "^2.0.3"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "configstore": "^4.0.0"
+  }
+}
