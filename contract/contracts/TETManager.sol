@@ -41,7 +41,7 @@ contract TETManager is Ownable, RBAC {
         require(users[userID].exists);
     }
 
-    function associateOwner(string userID, address owner) public onlyonlyRole(SLACK_BRIDGE) {
+    function associateOwner(string userID, address owner) public onlyRole(SLACK_BRIDGE) {
         require(owner!=address(this));
         require(users[userID].exists);
         require(bytes(userLookup[owner]).length == 0);
