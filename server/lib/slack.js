@@ -5,7 +5,8 @@ const pkg = require('../package.json');
 const conf = new Configstore(pkg.name);
 
 module.exports = function(tetManager, logger) {
-  let channels = {};
+  let channels = [];
+  let users = [];
   let rtmClient;
 
   Object.keys(conf.all).forEach((teamID)=>{
@@ -30,6 +31,21 @@ module.exports = function(tetManager, logger) {
       cursor = result.response_metadata.next_cursor;
     }
     channels = _channels;
+
+    cursor = null;
+    let _users = [];
+    while (cursor != '') {
+      const result = await botClient.users.list({limit: 200, cursor});
+      _users = _users.concat(result.members.filter((user)=>!(user.is_bot || user.id == 'USLACKBOT')));
+      cursor = result.response_metadata.next_cursor;
+    }
+    users = _users;
+
+    await Promise.all(users.map(async (user)=>{
+      if (!await tetManager.userExists(teamID, user.id)) {
+        await tetManager.addUser(teamID, user.id);
+      }
+    }));
 
     rtmClient.on('member_joined_channel', async ({user, channel, inviter})=>{
       if (user==botUserID) {

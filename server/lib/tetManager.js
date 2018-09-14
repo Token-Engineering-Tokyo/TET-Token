@@ -40,7 +40,7 @@ module.exports = {
       throw new Error('invalid teamID');
     }
     const from = await getAccount();
-    return await contracts[teamID].methods.addUser(userID).send({from, gas: config.gasLimit.addUser});
+    return await contracts[teamID].methods.addUser(userID, '100').send({from, gas: config.gasLimit.addUser});
   },
   join: async function(teamID, channelID, userID) {
     if (!contracts[teamID]) {
@@ -61,5 +61,11 @@ module.exports = {
       throw new Error('invalid teamID');
     }
     return await contracts[teamID].methods.userExists(userID).call();
+  },
+  balanceOf: async function(teamID, userID) {
+    if (!contracts[teamID]) {
+      throw new Error('invalid teamID');
+    }
+    return await contracts[teamID].methods.balanceOf(userID).call();
   },
 };
