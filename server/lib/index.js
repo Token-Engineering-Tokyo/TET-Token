@@ -1,9 +1,9 @@
 const log = require('./log');
-const slack = require('./slack');
 const tetManager = require('./tetManager');
+const slack = require('./slack')(tetManager, log.logger);
 
 module.exports = {
   log,
-  slack,
   tetManager,
+  slack,
 };

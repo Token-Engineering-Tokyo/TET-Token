@@ -20,5 +20,6 @@ module.exports = {
     addChannel: 1000000,
     addUser: 1000000,
     join: 1000000,
+    leave: 1000000,
   },
 };
