@@ -69,6 +69,14 @@ contract TETManager is Ownable, RBAC {
         _users[userID].owner = owner;
     }
 
+    function balanceOf(string userID) public view returns(uint balance) {
+        if (_users[userID].managed) {
+            return _users[userID].managedBalance;
+        } else {
+            return TETToken(tokenAddress).balanceOf(_users[userID].owner);
+        }
+    }
+
     function transferFrom(string fromUserID, string toUserID, uint value) public onlyRole(SLACK_BRIDGE) {
         address from;
         address to;
