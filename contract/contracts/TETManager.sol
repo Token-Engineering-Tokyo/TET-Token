@@ -17,8 +17,8 @@ contract TETManager is Ownable, RBAC {
         address owner;
     }
     address public tokenAddress;
-    mapping(string=>User) users;
-    mapping(address=>string) userLookup;
+    mapping(string=>User) public users;
+    mapping(address=>string) public userLookup;
 
     constructor() {
         tokenAddress = new TETToken();
