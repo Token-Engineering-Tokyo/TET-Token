@@ -21,8 +21,9 @@ function loggedin(req, res, next) {
   }
 };
 
-router.get('/', authed, loggedin, (req, res)=>{
-  res.render('index');
+router.get('/', authed, loggedin, async (req, res)=>{
+  const balance = await lib.tetManager.balanceOf(req.session.team.id, req.session.user.id);
+  res.render('index', {username: req.session.user.name, balance});
 });
 
 router.get('/login', authed, (req, res)=>{
@@ -49,6 +50,7 @@ router.get('/callback', async (req, res, next) =>{
       // user login callack
       if (data.ok) {
         req.session.user = data.user;
+        req.session.team = data.team;
         res.redirect('/');
       } else {
         lib.log.logger.warn('faild to login', data);
