@@ -30,7 +30,7 @@ router.get('/login', authed, (req, res)=>{
 });
 
 router.get('/auth', (req, res) =>{
-  res.redirect(`https://slack.com/oauth/authorize?scope=bot,admin,channels:write,channels:read,groups:read,groups:write,users.profile:read&client_id=${config.slack.client_id}`);
+  res.redirect(`https://slack.com/oauth/authorize?scope=bot,admin,channels:write,channels:read,groups:read,groups:write&client_id=${config.slack.client_id}`);
 });
 
 router.get('/callback', async (req, res, next) =>{

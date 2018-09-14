@@ -7,7 +7,7 @@ module.exports = {
     client_secret: process.env.SLACK_CLIENT_SECRET,
   },
   web3: {
-    provider: 'http://localhost:8545',
+    provider: 'ws://localhost:8546',
     accountIndex: 0,
   },
   abi: {

@@ -5,17 +5,21 @@ const pkg = require('../package.json');
 const conf = new Configstore(pkg.name);
 
 module.exports = function(tetManager, logger) {
+  let channels = {};
+  let rtmClient;
+
   Object.keys(conf.all).forEach((teamID)=>{
     const {accessToken, userID, botAccessToken, botUserID} = conf.get(teamID);
     init(teamID, accessToken, userID, botAccessToken, botUserID);
   });
 
-  let channels = {};
-
   async function init(teamID, accessToken, userID, botAccessToken, botUserID) {
     const userClient = new WebClient(accessToken);
     const botClient = new WebClient(botAccessToken);
-    const rtmClient = new RTMClient(botAccessToken);
+    if (rtmClient != null) {
+      await rtmClient.disconnect();
+    }
+    rtmClient = new RTMClient(botAccessToken);
     rtmClient.start();
 
     let cursor;
