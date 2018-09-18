@@ -47,10 +47,35 @@ module.exports = function(tetManager, logger) {
       }
     }));
 
+    rtmClient.on('channel_joined', async ({channel: {id: channel}})=>{
+      logger.info(`channel_joined, teamID: ${teamID}, channel: ${channel}`);
+      await tetManager.addChannel(teamID, channel, '0');
+    });
+    rtmClient.on('channel_left', async ({channel})=>{
+      logger.info(`channel_left, teamID: ${teamID}, channel: ${channel}`);
+      try {
+        await tetManager.deleteChannel(teamID, channel);
+      } catch (err) {
+        logger.error(err);
+      }
+    });
+    rtmClient.on('group_joined', async ({channel: {id: channel}})=>{
+      logger.info(`group_joined, teamID: ${teamID}, channel: ${channel}`);
+      await tetManager.addChannel(teamID, channel, '0');
+    });
+    rtmClient.on('group_left', async ({channel})=>{
+      logger.info(`group_left, teamID: ${teamID}, channel: ${channel}`);
+      try {
+        await tetManager.deleteChannel(teamID, channel);
+      } catch (err) {
+        logger.error(err);
+      }
+    });
+
     rtmClient.on('member_joined_channel', async ({user, channel, inviter})=>{
-      if (user==botUserID) {
-        await tetManager.addChannel(teamID, channel, '0');
-      } else {
+      // A user joined a public or private channel
+      if (user!=botUserID) {
+        logger.info(`member_joined_channel, teamID: ${teamID}, channel: ${channel}, user: ${user}`);
         try {
           if (!await tetManager.userExists(teamID, userID)) {
             throw new Error('user not found');
@@ -67,13 +92,9 @@ module.exports = function(tetManager, logger) {
       }
     });
     rtmClient.on('member_left_channel', async ({user, channel})=>{
-      if (user==botUserID) {
-        try {
-          await tetManager.deleteChannel(teamID, channel);
-        } catch (err) {
-          logger.error(err);
-        }
-      } else {
+      // A user left a public or private channel
+      if (user!=botUserID) {
+        logger.info(`member_left_channel, teamID: ${teamID}, channel: ${channel}, user: ${user}`);
         // FIX: member_joined_channelでkickされたときもこれが発行され、ユーザーがいないのにleaveしようとする(evmでrejectされるから問題ないが…)
         try {
           await tetManager.leave(teamID, channel, userID);
