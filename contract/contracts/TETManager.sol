@@ -29,6 +29,10 @@ contract TETManager is Ownable, RBAC {
         return (_users[userID].managed, _users[userID].managedBalance, _users[userID].owner);
     }
 
+    function channelExists(string channelID) public view returns(bool exists) {
+        return (true);
+    }
+
     function userExists(string userID) public view returns(bool exists) {
         return (_users[userID].exists);
     }

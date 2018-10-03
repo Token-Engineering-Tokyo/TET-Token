@@ -56,6 +56,12 @@ module.exports = {
     const from = await getAccount();
     return await contracts[teamID].methods.leave(channelID, userID).send({from, gas: config.gasLimit.leave});
   },
+  channelExists: async function(teamID, channelID) {
+    if (!contracts[teamID]) {
+      throw new Error('invalid teamID');
+    }
+    return await contracts[teamID].methods.channelExists(channelID).call();
+  },
   userExists: async function(teamID, userID) {
     if (!contracts[teamID]) {
       throw new Error('invalid teamID');

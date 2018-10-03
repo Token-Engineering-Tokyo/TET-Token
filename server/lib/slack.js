@@ -41,6 +41,12 @@ module.exports = function(tetManager, logger) {
     }
     users = _users;
 
+    await Promise.all(channels.map(async (channel)=>{
+      if (!await tetManager.channelExists(teamID, channel.id)) {
+        await tetManager.addChannel(teamID, channel.id);
+      }
+    }));
+
     await Promise.all(users.map(async (user)=>{
       if (!await tetManager.userExists(teamID, user.id)) {
         await tetManager.addUser(teamID, user.id);
